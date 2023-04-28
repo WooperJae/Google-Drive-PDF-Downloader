@@ -1,0 +1,1424 @@
+//Message: Citations are located at the bottom of the code.
+//Student Message: Although Camel Case naming is a standard, this project was started when the student did not know that Camel Case had to be used. 
+//Student Message: By the time the student had found out, there was too much code to rename and replace
+
+//Start screen sound and image
+playSound("sound://category_notifications/vibrant_game_tonal_hit_6_correct.mp3", false);
+
+//button brings user from title/intro screen to home screen
+//button turns on game music
+onEvent("EmptyButton", "click", function( ) {
+  playSound("sound://category_loops/vibrant_game_harping_down_forever_loop_2_accent.mp3", true);
+  playSound("sound://category_app/app_interface_click.mp3", false);
+  setScreen("NameScreen");
+});
+
+//button brings user to name screen where user will input their desired character name
+var Home = 0;
+onEvent("PlayButton", "click", function( ) {
+  playSound("sound://category_app/app_interface_click.mp3", false);
+  if (Home < 1) {
+    setScreen("NameScreen");
+    Home++;
+  } else {
+    setScreen("GameMap");
+  }
+});
+
+//button goes to dialogue that explains the user objective in the game
+onEvent("NextButton1", "click", function( ) {
+  playSound("sound://category_app/app_interface_click.mp3", false);
+  setScreen("DialogueScreen");
+});
+
+//button skips dialogue and sends player into game
+onEvent("SkipDialogue", "click", function( ) {
+  setScreen("TransitionScreen");
+  stopSound("sound://category_loops/vibrant_game_harping_down_forever_loop_2_accent.mp3");
+});
+
+//Directly below is the code for the transition screen
+hideElement("TransitionText1");
+hideElement("TransitionText2");
+setProperty("LoadingNext1", "x", -1000);
+setProperty("LoadingNext2", "x", -1000);
+onEvent("LoadingNext", "click", function( ) {
+  showElement("TransitionText1");
+  setProperty("LoadingNext1", "x", 240);
+});
+onEvent("LoadingNext1", "click", function( ) {
+  hideElement("TransitionText1");
+  showElement("TransitionText2");
+  setProperty("LoadingNext2", "x", 240);
+});
+onEvent("LoadingNext2", "click", function( ) {
+  playSound("Windless-Slopes.mp3", true);
+  setScreen("GameMap");
+  setScreen("GameMap");
+});
+
+
+
+
+
+//below is the lists needed for intro dialogue
+var InnKeeperDialogue = ["Welcome dear traveler!", "You are here to find some treasure?", "The head West towards the Sage Mines.", "All these BIRDS! They're gonna be the death of me."];
+
+
+//button starts dialogue
+//rest of the buttons continue dialogue
+onEvent("DialogueStart", "click", function( ) {
+  DialogueI();
+  deleteElement("DialogueStart");
+});
+onEvent("Dialogue1", "click", function( ) {
+  DialogueI();
+  deleteElement("Dialogue1");
+});
+onEvent("Dialogue2", "click", function( ) {
+  DialogueI();
+  deleteElement("Dialogue2");
+});
+onEvent("Dialogue3", "click", function( ) {
+  DialogueI();
+  deleteElement("Dialogue3");
+});
+
+//button ends dialogue
+onEvent("DialogueEnd", "click", function( ) {
+  setScreen("TransitionScreen");
+  stopSound("sound://category_loops/vibrant_game_harping_down_forever_loop_2_accent.mp3");
+});
+
+//function for dialogue formation
+//Inn Keeper dialogue
+var a = 0;
+function DialogueI() {
+  setText("DialogueText", " ");
+  setText("DialogueText", "Inn Keeper: " + InnKeeperDialogue[a]);
+  playSound("sound://category_app/modern_ui_sound.mp3", false);
+  a++;
+}
+
+
+
+//dialogue for Ancient Gateway
+var PlayerGatewayDialogue = ["It's the Ancient Birb Gateway", "It says I need to locate and discover different type of birds?"];
+
+//Player dialogue (for gateway)
+setProperty("ReturnToMines", "x", -1000);
+onEvent("GateDialogue3", "click", function( ) {
+  DialogueG();  
+  deleteElement("GateDialogue3");
+});
+onEvent("GateDialogue2", "click", function( ) {
+  DialogueG();  
+  deleteElement("GateDialogue2");
+});
+onEvent("GateDialogue1", "click", function( ) {
+  setText("AncientGateDialogueText", getText("NameEnter") + ": Let's go find some birds...");
+  setProperty("ReturnToMines", "x", 85);
+});
+
+var c = 0;
+function DialogueG() {
+  setText("AncientGateDialogueText", " ");
+  setText("AncientGateDialogueText",(getText("NameEnter") + ": ") + PlayerGatewayDialogue[c]);
+  playSound("sound://category_app/modern_ui_sound.mp3", false);
+  c++;
+}
+
+
+
+
+
+
+
+//Code for game function (buttons and functions)
+
+//Code related to game map
+for (var i = 2; i < 8; i++) {
+  hideElement("MapButton"+i);
+}
+
+onEvent("MapButton1", "click", function() {
+  setScreen("TheSageMines");
+  for (var i = 2; i < 8; i++) {
+    showElement("MapButton"+i);
+  }
+  playSound("sound://category_app/app_interface_click.mp3", false);
+  StartPosition(142, 120);
+});
+onEvent("MapButton2", "click", function( ) {
+  setScreen("CacaoInn");
+  playSound("sound://category_app/app_interface_click.mp3", false);
+  StartPosition(54, 340);
+});
+onEvent("MapButton3", "click", function( ) {
+  setScreen("IraVolcano");
+  playSound("sound://category_app/app_interface_click.mp3", false);
+  StartPosition(157, 24);
+});
+onEvent("MapButton4", "click", function( ) {
+  setScreen("CelesteLake");
+  playSound("sound://category_app/app_interface_click.mp3", false);
+  StartPosition(264, 288);
+});
+onEvent("MapButton5", "click", function( ) {
+  setScreen("AstrumValley");
+  playSound("sound://category_app/app_interface_click.mp3", false);
+  StartPosition(81, 7);
+});
+onEvent("MapButton6", "click", function( ) {
+  setScreen("VisusCreek");
+  playSound("sound://category_app/app_interface_click.mp3", false);
+  StartPosition(171, 348);
+});
+onEvent("MapButton7", "click", function( ) {
+  setScreen("AurumShore");
+  playSound("sound://category_app/app_interface_click.mp3", false);
+  StartPosition(44, 118);
+});
+
+//Code related to game map return
+onEvent("SageMinesMap", "click", function( ) {
+  GameMapReturn();
+});
+onEvent("CacaoInnMap", "click", function( ) {
+  GameMapReturn();
+});
+onEvent("IraVolcanoMap", "click", function( ) {
+  GameMapReturn();
+});
+onEvent("AstrumValleyMap", "click", function( ) {
+  GameMapReturn();
+});
+onEvent("VisusCreekMap", "click", function( ) {
+  GameMapReturn();
+});
+onEvent("AurumShoreMap", "click", function( ) {
+  GameMapReturn();
+});
+onEvent("CelesteLakeMap", "click", function( ) {
+  GameMapReturn();
+});
+
+function GameMapReturn() {
+  setScreen("GameMap");
+  playSound("sound://category_app/app_interface_click.mp3", false);
+}
+
+//Code for list 
+for (var i = 0; i < 7; i++) {
+  hideElement("ListText"+i);
+  hideElement("TaskItem"+i);
+}
+onEvent("List0", "click", function( ) {
+  List();
+});
+onEvent("List1", "click", function( ) {
+  List();
+});
+onEvent("List2", "click", function( ) {
+  List();
+});
+onEvent("List3", "click", function( ) {
+  List();
+});
+onEvent("List4", "click", function( ) {
+  List();
+});
+onEvent("List5", "click", function( ) {
+  List();
+});
+onEvent("List6", "click", function( ) {
+  List();
+});
+function List() {
+  for (var i = 0; i < 7; i++) {
+    showElement("ListText"+i);
+    showElement("TaskItem"+i);
+    setProperty("ListNext"+i, "x", 125);
+  }
+}
+
+for (var i = 0; i < 7; i++) {
+  setProperty("ListNext"+i, "x", -1000);
+}
+onEvent("ListNext0", "click", function( ) {
+  ListNext();
+});
+onEvent("ListNext1", "click", function( ) {
+  ListNext();
+});
+onEvent("ListNext2", "click", function( ) {
+  ListNext();
+});
+onEvent("ListNext3", "click", function( ) {
+  ListNext();
+});
+onEvent("ListNext4", "click", function( ) {
+  ListNext();
+});
+onEvent("ListNext5", "click", function( ) {
+  ListNext();
+});
+onEvent("ListNext6", "click", function( ) {
+  ListNext();
+});
+function ListNext() {
+  for (var i = 0; i < 7; i++) {
+    setProperty("ListNext"+i, "x", -1000);
+    hideElement("TaskItem"+i);
+    hideElement("ListText"+i);
+  }
+}
+
+
+
+
+
+// Code for gameplay (THE FUN STUFF)
+
+
+
+//Code for Ancient Gate
+
+//Hidden items for Ancient Gate
+hideElement("Exclamation");
+hideElement("GateGem");
+hideElement("GateStarFlower");
+hideElement("GateSnowflake");
+hideElement("GateFira");
+hideElement("GateCelestialFish");
+hideElement("GateSeashell");
+hideElement("GateWaterCrystal");
+
+//Code for when colliding with Ancient Gate, player goes to Ancient Gate Screen
+var MinesReturn = 0;
+function AncientGateDialogue() {
+  if (getXPosition("AncientGateway") + getProperty("AncientGateway", "width") >= getXPosition("MoveRight0") && (getXPosition("AncientGateway")) <= getXPosition("MoveRight0")+ getProperty("MoveRight0", "width")) {
+    if (getYPosition("AncientGateway") + getProperty("AncientGateway", "width") >= getYPosition("MoveRight0")&& (getYPosition("AncientGateway")) <= getYPosition("MoveRight0")+ getProperty("MoveRight0", "width")) {
+      setScreen("AncientGateDialogue");
+      stopSound("Windless-Slopes.mp3");
+      playSound("Celestial.mp3", true);
+      MinesReturn++;
+    }
+  }
+}
+function AncientGateGame() {
+  if (getXPosition("AncientGateway") + getProperty("AncientGateway", "width") >= getXPosition("MoveRight0") && (getXPosition("AncientGateway")) <= getXPosition("MoveRight0")+ getProperty("MoveRight0", "width")) {
+    if (getYPosition("AncientGateway") + getProperty("AncientGateway", "width") >= getYPosition("MoveRight0")&& (getYPosition("AncientGateway")) <= getYPosition("MoveRight0")+ getProperty("MoveRight0", "width")) {
+      setScreen("AncientGate");
+    }
+  } else if ((getXPosition("SageMinesExit") + getProperty("SageMinesExit", "width") >= getXPosition("MoveRight0")&& (getXPosition("SageMinesExit")) <= getXPosition("MoveRight0")+ getProperty("MoveRight0", "width"))) {
+    if (getYPosition("SageMinesExit") + getProperty("SageMinesExit", "width") >= getYPosition("MoveRight0")&& (getYPosition("SageMinesExit")) <= getYPosition("MoveRight0")+ getProperty("MoveRight0", "width")) {
+      LeaveLocation(GemNumber, "AstrumValley", 264, 185);
+      StartPosition(89, 21);
+    }
+  }
+}
+
+//Code for return button from Ancient Gateway
+onEvent("ReturnToMines", "click", function( ) {
+  showElement("List0");
+  setScreen("TaskScreen");
+  showElement("arrow2");
+  stopSound("Celestial.mp3");
+  playSound("Windless-Slopes.mp3", true);
+  setProperty("SageMinesExit", "x", 314);
+  setProperty("SageMinesBlocked", "x", 154);
+  setPosition("item1", 170, 36);
+  setPosition("item2", 51, 258);
+  setPosition("item3", 10, 136);
+  setPosition("item4", 252, 355);
+  setPosition("item6", 190, 190);
+});
+onEvent("ReturnToMinesGame", "click", function( ) {
+  StartPosition(124, 388);
+  setScreen("TheSageMines");
+  playSound("sound://category_app/app_interface_click.mp3", false);
+});
+
+//Code for Task Screen
+hideElement("TaskText2");
+hideElement("TaskText3");
+setProperty("TaskTextNext2", "x", -1000);
+setProperty("TaskTextNext3", "x", -1000);
+onEvent("TaskTextNext1", "click", function( ) {
+  showElement("TaskText2");
+  setProperty("TaskTextNext2", "x", 119);
+});
+onEvent("TaskTextNext2", "click", function( ) {
+  showElement("TaskText3");
+  setProperty("TaskTextNext3", "x", 119);
+});
+onEvent("TaskTextNext3", "click", function( ) {
+  StartPosition(124, 375);
+  setScreen("TheSageMines");
+  deleteElement("Exclamation");
+});
+
+//Code for returning to home from gaining treasure
+onEvent("TreasureEnd", "click", function( ) {
+  setScreen("EndScreen");
+  playSound("Celestial.mp3", true);
+  stopSound("Windless-Slopes.mp3");
+});
+
+//Code for finishing the game (reward: Treasure of Ezperanza)
+onEvent("TreasureCheck", "click", function( ) {
+  setText("TreasureText", getText("NameEnter") + ": Beholder of the Treasure of Ezperanza");
+  if ((GemNumber == 5) && (StarFlowerNumber == 5) && (SnowflakeNumber == 5) && (FiraNumber == 5) && (CelestialFishNumber == 5) && (SeashellNumber == 5) && (WaterCrystalNumber == 5)) {
+    playSound("sound://category_app/app_interface_click.mp3", false);
+    playSound("sound://category_bell/bells_win_low.mp3", false);
+    stopSound("Windless-Slopes.mp3");
+    setScreen("EzperanzaTreasure");
+  } else {
+    playSound("sound://default.mp3", false);
+    setText("AncientGateGameText", getText("NameEnter") + ": I need more items...");
+  }
+});
+
+
+
+
+
+//Code for hiding (or having items off map) collecting items in game
+PositionElements();
+hideElement("Border");
+
+
+
+//Code for Sage Mines
+
+//Hidden elements for the Sage Mines
+hideElement("List0");
+hideElement("arrow2");
+hideElement("Counter0");
+hideElement("SageMinesMap");
+hideElement("SageMinesBlocked");
+setProperty("SageMinesExit", "x", -1000);
+setProperty("SageMinesBlocked", "x", -1000);
+setProperty("SageMinesBlockedText", "x", -1000);
+for (var i = 1; i < 7; i++) {
+  setProperty("item"+i, "x", -1000);
+}
+
+//Starting code for Sage Mines (give brief directions)
+onEvent("TheSageMines", "keydown", function(Directions) {
+  if ((((Directions.key == "Up" || "Down") || "Left") || "Right") || "Enter") {
+    showElement("Exclamation");
+    hideElement("SageMinesExitTextBackground");
+    hideElement("GameDirections");
+    showElement("SageMinesMap");
+    showElement("Counter0");
+  }
+});
+
+//Player movement and animation for the Sage Mines
+HidePlayerElements(0);
+
+onEvent("TheSageMines", "keydown", function(Player) {
+var PlayerX = getXPosition("StopLeft0");
+var PlayerY = getYPosition("StopLeft0");
+var Travel = 4;
+if (Player.key == "Up") {
+  PlayerY = PlayerY - Travel;
+  PlayerUpKD();
+}
+if (Player.key == "Down") {
+  PlayerY = PlayerY + Travel;
+  PlayerDownKD();
+}
+if (Player.key == "Left") {
+  PlayerX = PlayerX - Travel;
+  PlayerLeftKD();
+}
+if (Player.key == "Right") {
+  PlayerX = PlayerX + Travel;
+  PlayerRightKD();
+}
+i++;
+setPosition("StopRight0", PlayerX, PlayerY);
+setPosition("MoveRight0", PlayerX, PlayerY);
+setPosition("MoveLeft0", PlayerX, PlayerY);
+setPosition("StopLeft0", PlayerX, PlayerY);
+CollisionDetector0();
+if (MinesReturn == 0) {
+  AncientGateDialogue();
+} else {
+  AncientGateGame();
+}
+CornerBorder();
+GameBorder(0);
+});
+
+
+//Code for item obtain button (obtain gems)
+var GemNumber = 0;
+onEvent("Next0", "click", function( ) {
+playSound("sound://category_app/app_interface_click.mp3", false);
+PositionElements();
+setProperty("SageMinesBlockedText", "x", -1000);
+GemNumber++;
+Counter("Gems");
+if (GemNumber == 5) {
+  showElement("GateGem");
+}
+for (var x = 0; x < 8; x++) {
+  setImageURL("ItemImage"+x, " ");
+}
+});
+//Code for location leave button
+onEvent("BirdNext0", "click", function( ) {
+  playSound("sound://category_app/app_interface_click.mp3", false);
+  PositionElements();
+});
+
+//Code for collision detection in Sage Mines (when player makes contact with hidden item, notifies player of item)
+function CollisionDetector0() {
+  for (var i = 1; i < 7; i++) {
+    if (getXPosition("item"+i) + getProperty("item"+i, "width") >= getXPosition("MoveRight0") && (getXPosition("item"+i)) <= getXPosition("MoveRight0")+ getProperty("MoveRight0", "width")) {
+      if (getYPosition("item"+i) + getProperty("item"+i, "width") >= getYPosition("MoveRight0")&& (getYPosition("item"+i)) <= getYPosition("MoveRight0")+ getProperty("MoveRight0", "width")) {
+        setPosition("item"+i, 1000, 1000);
+        setProperty("Next0", "x", 110);
+        setProperty("Text0", "x", 48);
+        setProperty("ItemImage0", "x", 50);
+        playSound("sound://category_achievements/lighthearted_bonus_objective_6.mp3", false);
+        BirbGenerate();
+      }
+    }
+  }
+}
+function CornerBorder() {
+  if (getXPosition("Border") + getProperty("Border", "width") >= getXPosition("MoveRight0") && (getXPosition("Border")) <= getXPosition("MoveRight0")+ getProperty("MoveRight0", "width")) {
+    if (getYPosition("Border") + getProperty("Border", "width") >= getYPosition("MoveRight0")&& (getYPosition("Border")) <= getYPosition("MoveRight0")+ getProperty("MoveRight0", "width")) {
+      setPosition("MoveRight0", getProperty("Border", "width"),getProperty("Border", "height"));
+      setPosition("MoveLeft0", getProperty("Border", "width"), getProperty("Border", "height"));
+      setPosition("StopRight0", getProperty("Border", "width"), getProperty("Border", "height"));
+      setPosition("StopLeft0", getProperty("Border", "width"), getProperty("Border", "height"));
+    }
+  }
+}
+
+onEvent("TheSageMines", "keyup", function(Player ) {
+  if (Player.key == "Up") {
+    PlayerUpKU();
+  }
+  if (Player.key == "Down") {
+    PlayerDownKU();
+  }
+  if (Player.key == "Right") {
+    PlayerLeftKU();
+  }
+  if (Player.key == "Left") {
+    PlayerRightKU();
+  }
+});
+
+
+
+//Player movement for Astrum Valley
+HidePlayerElements(1);
+
+onEvent("AstrumValley", "keydown", function(Player) {
+var PlayerX = getXPosition("StopLeft1");
+var PlayerY = getYPosition("StopLeft1");
+var Travel = 4;
+if (Player.key == "Up") {
+  PlayerY = PlayerY - Travel;
+  PlayerUpKD();
+}
+if (Player.key == "Down") {
+  PlayerY = PlayerY + Travel;
+  PlayerDownKD();
+}
+if (Player.key == "Left") {
+  PlayerX = PlayerX - Travel;
+  PlayerLeftKD();
+}
+if (Player.key == "Right") {
+  PlayerX = PlayerX + Travel;
+  PlayerRightKD();
+}
+setPosition("StopRight1", PlayerX, PlayerY);
+setPosition("MoveRight1", PlayerX, PlayerY);
+setPosition("MoveLeft1", PlayerX, PlayerY);
+setPosition("StopLeft1", PlayerX, PlayerY);
+GameBorder(1);
+CollisionDetector1();
+AstrumValleyLeave();
+});
+
+//Code for item obtain button (obtain star flowers)
+var StarFlowerNumber = 0;
+onEvent("Next1", "click", function( ) {
+playSound("sound://category_app/app_interface_click.mp3", false);
+setProperty("Next1", "x", -1000);
+setProperty("Text1", "x", -1000);
+setProperty("ItemImage1", "x", -1000);
+StarFlowerNumber++;
+Counter("Star Flowers");
+if (StarFlowerNumber == 5) {
+  showElement("GateStarFlower");
+}
+for (var x = 0; x < 8; x++) {
+  setImageURL("ItemImage"+x, " ");
+}
+});
+//Code for location leave button 
+onEvent("BirdNext1", "click", function( ) {
+  playSound("sound://category_app/app_interface_click.mp3", false);
+  PositionElements();
+});
+
+//Code for leaving Astrum Valley
+function AstrumValleyLeave() {
+  if (getXPosition("ValleyLake") + getProperty("ValleyLake", "width") >= getXPosition("MoveRight1") && (getXPosition("ValleyLake")) <= getXPosition("MoveRight1")+ getProperty("MoveRight1", "width")) {
+    if (getYPosition("ValleyLake") + getProperty("ValleyLake", "width") >= getYPosition("MoveRight1")&& (getYPosition("ValleyLake")) <= getYPosition("MoveRight1")+ getProperty("MoveRight1", "width")) {
+      LeaveLocation(StarFlowerNumber, "CelesteLake", 30, 152);
+      StartPosition(264, 288);
+    }
+  } else if ((getXPosition("ValleyShore") + getProperty("ValleyShore", "width") >= getXPosition("MoveRight1") && (getXPosition("ValleyShore")) <= getXPosition("MoveRight1")+ getProperty("MoveRight1", "width"))) {
+    if (getYPosition("ValleyShore") + getProperty("ValleyShore", "width") >= getYPosition("MoveRight1")&& (getYPosition("ValleyShore")) <= getYPosition("MoveRight1")+ getProperty("MoveRight1", "width")) {
+      LeaveLocation(StarFlowerNumber, "AurumShore", 14, 395);
+      StartPosition(252, 26);
+    }
+  } else if ((getXPosition("ValleyMines") + getProperty("ValleyMines", "width") >= getXPosition("MoveRight1") && (getXPosition("ValleyMines")) <= getXPosition("MoveRight1")+ getProperty("MoveRight1", "width"))) {
+    if (getYPosition("ValleyMines") + getProperty("ValleyMines", "width") >= getYPosition("MoveRight1")&& (getYPosition("ValleyMines")) <= getYPosition("MoveRight1")+ getProperty("MoveRight1", "width")) {
+      LeaveLocation(StarFlowerNumber, "TheSageMines", 88, 21);
+      StartPosition(260, 195);
+    }
+  } else if ((getXPosition("ValleyInn") + getProperty("ValleyInn", "width") >= getXPosition("MoveRight1") && (getXPosition("ValleyInn")) <= getXPosition("MoveRight1")+ getProperty("MoveRight1", "width"))) {
+    if (getYPosition("ValleyInn") + getProperty("ValleyInn", "width") >= getYPosition("MoveRight1")&& (getYPosition("ValleyInn")) <= getYPosition("MoveRight1")+ getProperty("MoveRight1", "width")) {
+      LeaveLocation(StarFlowerNumber, "CacaoInn", 180, 25);
+      StartPosition(54, 292);
+    }
+  } else if ((getXPosition("ValleyCreek") + getProperty("ValleyCreek", "width") >= getXPosition("MoveRight1") && (getXPosition("ValleyCreek")) <= getXPosition("MoveRight1")+ getProperty("MoveRight1", "width"))) {
+    if (getYPosition("ValleyCreek") + getProperty("ValleyCreek", "width") >= getYPosition("MoveRight1")&& (getYPosition("ValleyCreek")) <= getYPosition("MoveRight1")+ getProperty("MoveRight1", "width")) {
+      LeaveLocation(StarFlowerNumber, "VisusCreek", 275, 245);
+      StartPosition(7, 196);
+    }
+  }
+}
+
+//Code for collision detection in Astrum Valley (when player makes contact with hidden item, notifies player of item)
+function CollisionDetector1() {
+  for (var i = 7; i < 12; i++) {
+    if (getXPosition("item"+i) + getProperty("item"+i, "width") >= getXPosition("MoveRight1") && (getXPosition("item"+i)) <= getXPosition("MoveRight1")+ getProperty("MoveRight1", "width")) {
+      if (getYPosition("item"+i) + getProperty("item"+i, "width") >= getYPosition("MoveRight1")&& (getYPosition("item"+i)) <= getYPosition("MoveRight1")+ getProperty("MoveRight1", "width")) {
+        setPosition("item"+i, -100, -100);
+        setProperty("Next1", "x", 110);
+        setProperty("Text1", "x", 48);
+        setProperty("ItemImage1", "x", 50);
+        playSound("sound://category_achievements/lighthearted_bonus_objective_6.mp3", false);
+        BirbGenerate();
+      }
+    }
+  }
+}
+
+onEvent("AstrumValley", "keyup", function(Player ) {
+  if (Player.key == "Up") {
+    PlayerUpKU();
+  }
+  if (Player.key == "Down") {
+    PlayerDownKU();
+  }
+  if (Player.key == "Right") {
+    PlayerLeftKU();
+  }
+  if (Player.key == "Left") {
+    PlayerRightKU();
+  }
+});
+
+
+
+//Player movement and animation for Cacao Inn
+HidePlayerElements(2);
+hideElement("InnValley");
+
+onEvent("CacaoInn", "keydown", function(Player) {
+var PlayerX = getXPosition("StopLeft2");
+var PlayerY = getYPosition("StopLeft2");
+var Travel = 4;
+if (Player.key == "Up") {
+  PlayerY = PlayerY - Travel;
+  PlayerUpKD();
+}
+if (Player.key == "Down") {
+  PlayerY = PlayerY + Travel;
+  PlayerDownKD();
+}
+if (Player.key == "Left") {
+  PlayerX = PlayerX - Travel;
+  PlayerLeftKD();
+}
+if (Player.key == "Right") {
+  PlayerX = PlayerX + Travel;
+  PlayerRightKD();
+}
+setPosition("StopRight2", PlayerX, PlayerY);
+setPosition("MoveRight2", PlayerX, PlayerY);
+setPosition("MoveLeft2", PlayerX, PlayerY);
+setPosition("StopLeft2", PlayerX, PlayerY);
+GameBorder(2);
+CollisionDetector2();
+CacaoInnLeave();
+});
+
+//Code for item obtain button (obtain snowflakes)
+var SnowflakeNumber = 0;
+onEvent("Next2", "click", function( ) {
+playSound("sound://category_app/app_interface_click.mp3", false);
+PositionElements();
+SnowflakeNumber++;
+Counter("Snowflakes");
+if (SnowflakeNumber == 5) {
+  showElement("GateSnowflake");
+}
+for (var x = 0; x < 8; x++) {
+  setImageURL("ItemImage"+x, " ");
+}
+});
+//Code for location leave button
+onEvent("BirdNext2", "click", function( ) {
+  playSound("sound://category_app/app_interface_click.mp3", false);
+  PositionElements();
+});
+
+//Code for leaving Cacao Inn
+function CacaoInnLeave() {
+  if (getXPosition("InnValley") + getProperty("InnValley", "width") >= getXPosition("MoveRight2") && (getXPosition("InnValley")) <= getXPosition("MoveRight2")+ getProperty("MoveRight2", "width")) {
+    if (getYPosition("InnValley") + getProperty("InnValley", "width") >= getYPosition("MoveRight2")&& (getYPosition("InnValley")) <= getYPosition("MoveRight2")+ getProperty("MoveRight2", "width")) {
+      LeaveLocation(SnowflakeNumber, "AstrumValley", 70, 310);
+      StartPosition(193, 38);
+    }
+  } else {
+    if (getXPosition("InnVolcano") + getProperty("InnVolcano", "width") >= getXPosition("MoveRight2") && (getXPosition("InnVolcano")) <= getXPosition("MoveRight2")+ getProperty("MoveRight2", "width")) {
+      if (getYPosition("InnVolcano") + getProperty("InnVolcano", "width") >= getYPosition("MoveRight2")&& (getYPosition("InnVolcano")) <= getYPosition("MoveRight2")+ getProperty("MoveRight2", "width")) {
+        LeaveLocation(SnowflakeNumber, "IraVolcano", 268, 72);
+        StartPosition(157, 35);
+      }
+    }
+  }
+}
+
+//Code for collision detection in Cacao Inn (when player makes contact with hidden item, notifies player of item)
+function CollisionDetector2() {
+  for (var i = 12; i < 17; i++) {
+    if (getXPosition("item"+i) + getProperty("item"+i, "width") >= getXPosition("MoveRight2") && (getXPosition("item"+i)) <= getXPosition("MoveRight2")+ getProperty("MoveRight2", "width")) {
+      if (getYPosition("item"+i) + getProperty("item"+i, "width") >= getYPosition("MoveRight2")&& (getYPosition("item"+i)) <= getYPosition("MoveRight2")+ getProperty("MoveRight2", "width")) {
+        setPosition("item"+i, -100, -100);
+        setProperty("Next2", "x", 110);
+        setProperty("Text2", "x", 48);
+        setProperty("ItemImage2", "x", 50);
+        playSound("sound://category_achievements/lighthearted_bonus_objective_6.mp3", false);
+        BirbGenerate();
+      }
+    }
+  }
+}
+
+onEvent("CacaoInn", "keyup", function(Player ) {
+  if (Player.key == "Up") {
+    PlayerUpKU();
+  }
+  if (Player.key == "Down") {
+    PlayerDownKU();
+  }
+  if (Player.key == "Right") {
+    PlayerLeftKU();
+  }
+  if (Player.key == "Left") {
+    PlayerRightKU();
+  }
+});
+
+
+//Player movement and animation for Ira Volcano
+HidePlayerElements(3);
+hideElement("VolcanoValley");
+
+onEvent("IraVolcano", "keydown", function(Player) {
+var PlayerX = getXPosition("StopLeft3");
+var PlayerY = getYPosition("StopLeft3");
+var Travel = 4;
+if (Player.key == "Up") {
+  PlayerY = PlayerY - Travel;
+  PlayerUpKD();
+}
+if (Player.key == "Down") {
+  PlayerY = PlayerY + Travel;
+  PlayerDownKD();
+}
+if (Player.key == "Left") {
+  PlayerX = PlayerX - Travel;
+  PlayerLeftKD();
+}
+if (Player.key == "Right") {
+  PlayerX = PlayerX + Travel;
+  PlayerRightKD();
+}
+setPosition("StopRight3", PlayerX, PlayerY);
+setPosition("MoveRight3", PlayerX, PlayerY);
+setPosition("MoveLeft3", PlayerX, PlayerY);
+setPosition("StopLeft3", PlayerX, PlayerY);
+GameBorder(3);
+CollisionDetector3();
+IraVolcanoLeave();
+});
+
+//Code for item obtain button (obtain firas)
+var FiraNumber = 0;
+onEvent("Next3", "click", function( ) {
+playSound("sound://category_app/app_interface_click.mp3", false);
+PositionElements();
+FiraNumber++;
+Counter("Firas");
+if (FiraNumber == 5) {
+  showElement("GateFira");
+}
+for (var x = 0; x < 8; x++) {
+  setImageURL("ItemImage"+x, " ");
+}
+});
+//Code for location leave button
+onEvent("BirdNext3", "click", function( ) {
+  playSound("sound://category_app/app_interface_click.mp3", false);
+  PositionElements();
+});
+
+//Code for leaving Ira Volcano
+function IraVolcanoLeave() {
+  if (getXPosition("VolcanoValley") + getProperty("VolcanoValley", "width") >= getXPosition("MoveRight3") && (getXPosition("VolcanoValley")) <= getXPosition("MoveRight3")+ getProperty("MoveRight3", "width")) {
+    if (getYPosition("VolcanoValley") + getProperty("VolcanoValley", "width") >= getYPosition("MoveRight3")&& (getYPosition("VolcanoValley")) <= getYPosition("MoveRight3")+ getProperty("MoveRight3", "width")) {
+      LeaveLocation(FiraNumber, "CacaoInn", 162, 30);
+      StartPosition(271, 93);
+    }
+  }
+}
+
+//Code for collision detection in Ira Volcano (when player makes contact with hidden item, notifies player of item)
+function CollisionDetector3() {
+  for (var i = 17; i < 22; i++) {
+    if (getXPosition("item"+i) + getProperty("item"+i, "width") >= getXPosition("MoveRight3") && (getXPosition("item"+i)) <= getXPosition("MoveRight3")+ getProperty("MoveRight3", "width")) {
+      if (getYPosition("item"+i) + getProperty("item"+i, "width") >= getYPosition("MoveRight3")&& (getYPosition("item"+i)) <= getYPosition("MoveRight3")+ getProperty("MoveRight3", "width")) {
+        setPosition("item"+i, -100, -100);
+        setProperty("Next3", "x", 110);
+        setProperty("Text3", "x", 48);
+        setProperty("ItemImage3", "x", 50);
+        playSound("sound://category_achievements/lighthearted_bonus_objective_6.mp3", false);
+        BirbGenerate();
+      }
+    }
+  }
+}
+
+onEvent("IraVolcano", "keyup", function(Player ) {
+  if (Player.key == "Up") {
+    PlayerUpKU();
+  }
+  if (Player.key == "Down") {
+    PlayerDownKU();
+  }
+  if (Player.key == "Right") {
+    PlayerLeftKU();
+  }
+  if (Player.key == "Left") {
+    PlayerRightKU();
+  }
+});
+
+
+
+//Player movement and animation for Celeste Lake
+HidePlayerElements(4);
+
+onEvent("CelesteLake", "keydown", function(Player) {
+var PlayerX = getXPosition("StopLeft4");
+var PlayerY = getYPosition("StopLeft4");
+var Travel = 4;
+if (Player.key == "Up") {
+  PlayerY = PlayerY - Travel;
+  PlayerUpKD();
+}
+if (Player.key == "Down") {
+  PlayerY = PlayerY + Travel;
+  PlayerDownKD();
+}
+if (Player.key == "Left") {
+  PlayerX = PlayerX - Travel;
+  PlayerLeftKD();
+}
+if (Player.key == "Right") {
+  PlayerX = PlayerX + Travel;
+  PlayerRightKD();
+}
+setPosition("StopRight4", PlayerX, PlayerY);
+setPosition("MoveRight4", PlayerX, PlayerY);
+setPosition("MoveLeft4", PlayerX, PlayerY);
+setPosition("StopLeft4", PlayerX, PlayerY);
+GameBorder(4);
+CollisionDetector4();
+CelesteLakeLeave();
+});
+
+//Code for item obtain button (obtain celestial fish)
+var CelestialFishNumber = 0;
+onEvent("Next4", "click", function( ) {
+playSound("sound://category_app/app_interface_click.mp3", false);
+PositionElements();
+CelestialFishNumber++;
+Counter("Celestial Fish");
+if (CelestialFishNumber == 5) {
+  showElement("GateCelestialFish");
+}
+for (var x = 0; x < 8; x++) {
+  setImageURL("ItemImage"+x, " ");
+}
+});
+//Code for location leave button
+onEvent("BirdNext4", "click", function( ) {
+  playSound("sound://category_app/app_interface_click.mp3", false);
+  PositionElements();
+});
+
+//Code for leaving Celeste Lake
+function CelesteLakeLeave() {
+  if (getXPosition("LakeValley") + getProperty("LakeValley", "width") >= getXPosition("MoveRight4") && (getXPosition("LakeValley")) <= getXPosition("MoveRight4")+ getProperty("MoveRight4", "width")) {
+    if (getYPosition("LakeValley") + getProperty("LakeValley", "width") >= getYPosition("MoveRight4")&& (getYPosition("LakeValley")) <= getYPosition("MoveRight4")+ getProperty("MoveRight4", "width")) {
+      LeaveLocation(CelestialFishNumber, "AstrumValley", 280, 325);
+      StartPosition(13, 146);
+    }
+  } else {
+    if (getXPosition("LakeShore") + getProperty("LakeShore", "width") >= getXPosition("MoveRight4") && (getXPosition("LakeShore")) <= getXPosition("MoveRight4")+ getProperty("MoveRight4", "width")) {
+      if (getYPosition("LakeShore") + getProperty("LakeShore", "width") >= getYPosition("MoveRight4")&& (getYPosition("LakeShore")) <= getYPosition("MoveRight4")+ getProperty("MoveRight4", "width")) {
+        LeaveLocation(CelestialFishNumber, "AurumShore", 27, 131);
+        StartPosition(272, 332);
+      }
+    }
+  }
+}
+
+//Code for collision detection in Celeste Lake (when player makes contact with hidden item, notifies player of item)
+function CollisionDetector4() {
+  for (var i = 22; i < 27; i++) {
+    if (getXPosition("item"+i) + getProperty("item"+i, "width") >= getXPosition("MoveRight4") && (getXPosition("item"+i)) <= getXPosition("MoveRight4")+ getProperty("MoveRight4", "width")) {
+      if (getYPosition("item"+i) + getProperty("item"+i, "width") >= getYPosition("MoveRight4")&& (getYPosition("item"+i)) <= getYPosition("MoveRight4")+ getProperty("MoveRight4", "width")) {
+        setPosition("item"+i, -100, -100);
+        setProperty("Next4", "x", 110);
+        setProperty("Text4", "x", 48);
+        setProperty("ItemImage4", "x", 50);
+        playSound("sound://category_achievements/lighthearted_bonus_objective_6.mp3", false);
+        BirbGenerate();
+      }
+    }
+  }
+}
+
+onEvent("CelesteLake", "keyup", function(Player ) {
+  if (Player.key == "Up") {
+    PlayerUpKU();
+  }
+  if (Player.key == "Down") {
+    PlayerDownKU();
+  }
+  if (Player.key == "Right") {
+    PlayerLeftKU();
+  }
+  if (Player.key == "Left") {
+    PlayerRightKU();
+  }
+});
+
+//Player movement and animation for Aurum Shore
+HidePlayerElements(5);
+
+onEvent("AurumShore", "keydown", function(Player) {
+var PlayerX = getXPosition("StopLeft5");
+var PlayerY = getYPosition("StopLeft5");
+var Travel = 4;
+if (Player.key == "Up") {
+  PlayerY = PlayerY - Travel;
+  PlayerUpKD();
+}
+if (Player.key == "Down") {
+  PlayerY = PlayerY + Travel;
+  PlayerDownKD();
+}
+if (Player.key == "Left") {
+  PlayerX = PlayerX - Travel;
+  PlayerLeftKD();
+}
+if (Player.key == "Right") {
+  PlayerX = PlayerX + Travel;
+  PlayerRightKD();
+}
+setPosition("StopRight5", PlayerX, PlayerY);
+setPosition("MoveRight5", PlayerX, PlayerY);
+setPosition("MoveLeft5", PlayerX, PlayerY);
+setPosition("StopLeft5", PlayerX, PlayerY);
+GameBorder(5);
+CollisionDetector5();
+AurumShoreLeave();
+});
+
+//Code for item obtain button (obtain seashell)
+var SeashellNumber = 0;
+onEvent("Next5", "click", function( ) {
+playSound("sound://category_app/app_interface_click.mp3", false);
+PositionElements();
+SeashellNumber++;
+Counter("Seashells");
+if (SeashellNumber == 5) {
+  showElement("GateSeashell");
+}
+for (var x = 0; x < 8; x++) {
+  setImageURL("ItemImage"+x, " ");
+}
+});
+//Code for location leave button
+onEvent("BirdNext5", "click", function( ) {
+  playSound("sound://category_app/app_interface_click.mp3", false);
+  PositionElements();
+});
+
+//Code for leaving Aurum Shore
+function AurumShoreLeave() {
+  if (getXPosition("ShoreLake") + getProperty("ShoreLake", "width") >= getXPosition("MoveRight5") && (getXPosition("ShoreLake")) <= getXPosition("MoveRight5")+ getProperty("MoveRight5", "width")) {
+    if (getYPosition("ShoreLake") + getProperty("ShoreLake", "width") >= getYPosition("MoveRight5")&& (getYPosition("ShoreLake")) <= getYPosition("MoveRight5")+ getProperty("MoveRight5", "width")) {
+      LeaveLocation(SeashellNumber, "CelesteLake", 275, 320);
+      StartPosition(17, 122);
+    }
+  } else if ((getXPosition("ShoreValley") + getProperty("ShoreValley", "width") >= getXPosition("MoveRight5") && (getXPosition("ShoreValley")) <= getXPosition("MoveRight5")+ getProperty("MoveRight5", "width"))) {
+    if (getYPosition("ShoreValley") + getProperty("ShoreValley", "width") >= getYPosition("MoveRight5")&& (getYPosition("ShoreValley")) <= getYPosition("MoveRight5")+ getProperty("MoveRight5", "width")) {
+      LeaveLocation(SeashellNumber, "AstrumValley", 255, 33);
+      StartPosition(8, 397);
+    }
+  } else {
+    if (getXPosition("ShoreCreek") + getProperty("ShoreCreek", "width") >= getXPosition("MoveRight5") && (getXPosition("ShoreCreek")) <= getXPosition("MoveRight5")+ getProperty("MoveRight5", "width")) {
+      if (getYPosition("ShoreCreek") + getProperty("ShoreCreek", "width") >= getYPosition("MoveRight5")&& (getYPosition("ShoreCreek")) <= getYPosition("MoveRight5")+ getProperty("MoveRight5", "width")) {
+        LeaveLocation(SeashellNumber, "VisusCreek", 60, 400);
+        StartPosition(266, 158);
+      }
+    }
+  }
+}
+
+//Code for collision detection in Aurum Shore (when player makes contact with hidden item, notifies player of item)
+function CollisionDetector5() {
+  for (var i = 27; i < 32; i++) {
+    if (getXPosition("item"+i) + getProperty("item"+i, "width") >= getXPosition("MoveRight5") && (getXPosition("item"+i)) <= getXPosition("MoveRight5")+ getProperty("MoveRight5", "width")) {
+      if (getYPosition("item"+i) + getProperty("item"+i, "width") >= getYPosition("MoveRight5")&& (getYPosition("item"+i)) <= getYPosition("MoveRight5")+ getProperty("MoveRight5", "width")) {
+        setPosition("item"+i, -100, -100);
+        setProperty("Next5", "x", 110);
+        setProperty("Text5", "x", 48);
+        setProperty("ItemImage5", "x", 50);
+        playSound("sound://category_achievements/lighthearted_bonus_objective_6.mp3", false);
+        BirbGenerate();
+      }
+    }
+  }
+}
+
+onEvent("AurumShore", "keyup", function(Player ) {
+  if (Player.key == "Up") {
+    PlayerUpKU();
+  }
+  if (Player.key == "Down") {
+    PlayerDownKU();
+  }
+  if (Player.key == "Right") {
+    PlayerLeftKU();
+  }
+  if (Player.key == "Left") {
+    PlayerRightKU();
+  }
+});
+
+
+
+//Player movement and animation for Visus Creek
+HidePlayerElements(6);
+
+onEvent("VisusCreek", "keydown", function(Player) {
+var PlayerX = getXPosition("StopLeft6");
+var PlayerY = getYPosition("StopLeft6");
+var Travel = 4;
+if (Player.key == "Up") {
+  PlayerY = PlayerY - Travel;
+  PlayerUpKD();
+}
+if (Player.key == "Down") {
+  PlayerY = PlayerY + Travel;
+  PlayerDownKD();
+}
+if (Player.key == "Left") {
+  PlayerX = PlayerX - Travel;
+  PlayerLeftKD();
+}
+if (Player.key == "Right") {
+  PlayerX = PlayerX + Travel;
+  PlayerRightKD();
+}
+setPosition("StopRight6", PlayerX, PlayerY);
+setPosition("MoveRight6", PlayerX, PlayerY);
+setPosition("MoveLeft6", PlayerX, PlayerY);
+setPosition("StopLeft6", PlayerX, PlayerY);
+GameBorder(6);
+CollisionDetector6();
+VisusCreekLeave();
+});
+
+//Code for item obtain button (obtain water crystals)
+var WaterCrystalNumber = 0;
+onEvent("Next6", "click", function( ) {
+playSound("sound://category_app/app_interface_click.mp3", false);
+PositionElements();
+WaterCrystalNumber++;
+Counter("Water Crystals");
+if (WaterCrystalNumber == 5) {
+  showElement("GateWaterCrystal");
+}
+for (var x = 0; x < 8; x++) {
+  setImageURL("ItemImage"+x, " ");
+}
+});
+//Code for location leave button
+onEvent("BirdNext6", "click", function( ) {
+  playSound("sound://category_app/app_interface_click.mp3", false);
+  PositionElements();
+});
+
+//Code for leaving Visus Creek
+function VisusCreekLeave() {
+  if (getXPosition("CreekValley") + getProperty("CreekValley", "width") >= getXPosition("MoveRight6") && (getXPosition("CreekValley")) <= getXPosition("MoveRight6")+ getProperty("MoveRight6", "width")) {
+    if (getYPosition("CreekValley") + getProperty("CreekValley", "width") >= getYPosition("MoveRight6")&& (getYPosition("CreekValley")) <= getYPosition("MoveRight6")+ getProperty("MoveRight6", "width")) {
+      LeaveLocation(WaterCrystalNumber, "AstrumValley", 26, 200);
+      StartPosition(275, 242);
+    }
+  } else {
+    if (getXPosition("CreekShore") + getProperty("CreekShore", "width") >= getXPosition("MoveRight6") && (getXPosition("CreekShore")) <= getXPosition("MoveRight6")+ getProperty("MoveRight6", "width")) {
+      if (getYPosition("CreekShore") + getProperty("CreekShore", "width") >= getYPosition("MoveRight6")&& (getYPosition("CreekShore")) <= getYPosition("MoveRight6")+ getProperty("MoveRight6", "width")) {
+        LeaveLocation(WaterCrystalNumber, "AurumShore", 275, 145);
+        StartPosition(25, 390);
+      }
+    }
+  }
+}
+
+//Code for collision detection in Visus Creek (when player makes contact with hidden item, notifies player of item)
+function CollisionDetector6() {
+  for (var i = 32; i < 37; i++) {
+    if (getXPosition("item"+i) + getProperty("item"+i, "width") >= getXPosition("MoveRight6") && (getXPosition("item"+i)) <= getXPosition("MoveRight6")+ getProperty("MoveRight6", "width")) {
+      if (getYPosition("item"+i) + getProperty("item"+i, "width") >= getYPosition("MoveRight6")&& (getYPosition("item"+i)) <= getYPosition("MoveRight6")+ getProperty("MoveRight6", "width")) {
+        setPosition("item"+i, -100, -100);
+        setProperty("Next6", "x", 110);
+        setProperty("Text6", "x", 48);
+        setProperty("ItemImage6", "x", 50);
+        playSound("sound://category_achievements/lighthearted_bonus_objective_6.mp3", false);
+        BirbGenerate();
+      }
+    }
+  }
+}
+
+onEvent("VisusCreek", "keyup", function(Player ) {
+  if (Player.key == "Up") {
+    PlayerUpKU();
+  }
+  if (Player.key == "Down") {
+    PlayerDownKU();
+  }
+  if (Player.key == "Right") {
+    PlayerLeftKU();
+  }
+  if (Player.key == "Left") {
+    PlayerRightKU();
+  }
+});
+
+
+
+
+
+//FUNCTIONS
+
+//Code for player movement visuals
+// - Key Down
+function PlayerUpKD() {
+  for (var i = 0; i < 7; i++) {
+    hideElement("StopLeft"+i);
+    hideElement("StopRight"+i);
+    hideElement("MoveRight"+i);
+    showElement("MoveLeft"+i);
+  }
+}
+function PlayerDownKD() {
+  for (var i = 0; i < 7; i++) {
+    hideElement("StopLeft"+i);
+    hideElement("StopRight"+i);
+    hideElement("MoveLeft"+i);
+    showElement("MoveRight"+i);
+  }
+}
+function PlayerLeftKD() {
+  for (var i = 0; i < 7; i++) {
+    hideElement("StopLeft"+i);
+    hideElement("StopRight"+i);
+    hideElement("MoveRight"+i);
+    showElement("MoveLeft"+i);
+  }
+}
+function PlayerRightKD() {
+  for (var i = 0; i < 7; i++) {
+    hideElement("StopLeft"+i);
+    hideElement("StopRight"+i);
+    hideElement("MoveLeft"+i);
+    showElement("MoveRight"+i);
+  }
+}
+// - Key Up
+function PlayerUpKU() {
+  for (var i = 0; i < 7; i++) {
+    hideElement("StopRight"+i);
+    hideElement("MoveRight"+i);
+    hideElement("MoveLeft"+i);
+    showElement("StopLeft"+i);
+  }
+}
+function PlayerDownKU() {
+  for (var i = 0; i < 7; i++) {
+    hideElement("StopLeft"+i);
+    hideElement("MoveRight"+i);
+    hideElement("MoveLeft"+i);
+    showElement("StopRight"+i);
+  }
+}
+function PlayerLeftKU() {
+  for (var i = 0; i < 7; i++) {
+    hideElement("StopLeft"+i);
+    hideElement("MoveRight"+i);
+    hideElement("MoveLeft"+i);
+    showElement("StopRight"+i);
+  }
+}
+function PlayerRightKU() {
+  for (var i = 0; i < 7; i++) {
+    hideElement("StopRight"+i);
+    hideElement("MoveRight"+i);
+    hideElement("MoveLeft"+i);
+    showElement("StopLeft"+i);
+  }
+}
+
+
+
+//Code for game border (prevents player from going off the map for all areas)
+function GameBorder(i) {
+while (i<7) {
+  var PlayerX = getXPosition("StopLeft" + i);
+  var PlayerY = getYPosition("StopLeft"+ i);
+  if (getXPosition("StopRight" + i) < -11) {
+    PlayerX = -11;
+  } else if ((getXPosition("StopRight"+ i) > 292)) {
+    PlayerX = 292 ;
+  } else if ((getYPosition("StopRight"+ i) < -3)) {
+    PlayerY = -3 ;
+  } else if ((getYPosition("StopRight"+ i) > 411)) {
+    PlayerY = 411 ;
+  } else {
+    PlayerX = getXPosition("StopRight"+i);
+    PlayerY = getYPosition("StopRight"+i);
+  }
+  setPosition("StopRight"+ i, PlayerX, PlayerY);
+  setPosition("StopLeft"+ i, PlayerX, PlayerY);
+  setPosition("MoveRight"+ i, PlayerX, PlayerY);
+  setPosition("MoveLeft"+ i, PlayerX, PlayerY);
+  i++;
+}
+}
+
+
+
+//Code for hidding elements (or having elements off screen)
+function HidePlayerElements(i) {
+  while ((i < 7)) {
+    hideElement("MoveLeft"+i);
+    hideElement("MoveRight"+i);
+    hideElement("StopLeft"+i);
+    i++;
+  }
+}
+function PositionElements() {
+  for (var i = 0; i < 7; i++) {
+    setProperty("Next"+i, "x", -1000);
+    setProperty("Text"+i, "x", -1000);
+    setProperty("ItemImage"+i, "x", -1000);
+    setProperty("BirdNext"+i, "x", -1000);
+    setProperty("BirdText"+i, "x", -1000);
+  }
+}
+
+
+
+//Code for player position restarting when leave locations
+function StartPosition(x, y) {
+  for (var i = 0; i < 7; i++) {
+    setPosition("MoveRight"+i, x, y);
+    setPosition("MoveLeft"+i, x, y);
+    setPosition("StopRight"+i, x, y);
+    setPosition("StopLeft"+i, x, y);
+  }
+}
+
+
+
+//Code for counting items for each location
+function Counter(item) {
+  if (item == "Gems") {
+    setText("Counter0", (item + " found: ") + GemNumber);
+  } else if ((item == "Star Flowers")) {
+    setText("Counter1", (item + " found: ") + StarFlowerNumber);
+  } else if ((item == "Snowflakes")) {
+    setText("Counter2", (item + " found: ") + SnowflakeNumber);
+  } else if ((item == "Firas")) {
+    setText("Counter3", (item + " found: ") + FiraNumber);
+  } else if ((item == "Celestial Fish")) {
+    setText("Counter4", (item + " found: ") + CelestialFishNumber);
+  } else if ((item == "Seashells")) {
+    setText("Counter5", (item + " found: ") + SeashellNumber);
+  } else {
+    setText("Counter6", (item + " found: ") + WaterCrystalNumber);
+  }
+}
+
+
+
+//Code for allowing location leave
+function LeaveLocation(item, screen, x, y) {
+  if (item == 5) {
+    setScreen(screen);
+  } else {
+    for (var i = 0; i < 7; i++) {
+      setPosition("MoveRight"+i, x, y);
+      setPosition("MoveLeft"+i, x, y);
+      setPosition("StopRight"+i, x, y);
+      setPosition("StopLeft"+i, x, y);
+      setProperty("BirdNext"+i, "x", 110);
+      setProperty("BirdText"+i, "x", 48);
+      setText("BirdText"+i, "\n" + "\n" + "You should not leave to the next location till you have found all the birds!" + "\n" + "\n" + "You have been teleported far away from the exits as punishment.");
+    }
+  }
+}
+
+
+
+//Code for identifying birds once player finds item
+//Lists that will be used in program
+var BirbIdList = getColumn("100 Birds of the World", "id");
+var BirbNameList = getColumn("100 Birds of the World", "Name");
+var BirbImageList = getColumn("100 Birds of the World", "Image of Bird");
+
+//Filtered versions of lists
+var BirbNameListFilter = [];
+var BirbImageListFilter = [];
+
+//Code that filters lists
+function BirbGenerate() {
+  var birb = BirbIdList[(randomNumber(1, 98))];
+  for (var i = 0; i < BirbIdList.length; i++) {
+    if (BirbIdList[i] == birb) {
+      BirbNameListFilter = BirbNameList[i];
+      BirbImageListFilter = BirbImageList[i];
+    }
+  }
+  for (var x = 0; x < 7; x++) {
+    setText("Text"+x, " ");
+    setImageURL("ItemImage"+x, BirbImageListFilter);
+    setText("Text"+x, ((" " + "\n" + "You have found the ") + BirbNameListFilter) + "!");
+  }
+}
+
+
+
+
+//CITATIONS/REFERENCES
+//Music from Code.org
+//Citation: Windless Slopes by Allan Oliveira https://soundcloud.com/arfomusic/sets/rpgpack
+//Citation: Celestial by Allan Oliveira https://soundcloud.com/arfomusic/sets/rpgpack
+//Gameplay and Ancient Door Music from Code.org
+//Click noises from Code.org
+
+//Introduction
+//Start Screen made using Canva at canva.com
+//Citation: Cacao and coffeshop by faxdoc https://www.deviantart.com/faxdoc/art/Cacao-and-coffee-shop-580036274
+
+//Dialogue
+//Citation: Inner Keeper Image by Saphatthachat Sunchoote https://www.dreamstime.com/vector-pixel-art-old-man-isolated-cartoon-vector-pixel-art-old-man-image153358677
+//Citation: Cacao and coffeshop by faxdoc https://www.deviantart.com/faxdoc/art/Cacao-and-coffee-shop-580036274
+//Citation: Map image by Soy Emilia https://www.kindpng.com/imgv/Tobmo_scroll-pixel-art-png-transparent-png/
+
+//Transition screen
+//From Canva 
+//Citation: https://www.canva.com/design/DAFa7QRy5lQ/Rdf_BL4MDgm737JTrPV78w/edit
+
+//Game Map
+//Citation: Cacao and coffeshop by faxdoc https://www.deviantart.com/faxdoc/art/Cacao-and-coffee-shop-580036274
+//Citation: Medival game map by Amanz Galzor https://www.artstation.com/artwork/o2RgAw
+//Citation: Scroll paper isolated https://www.dreamstime.com/scroll-paper-isolated-vintage-blank-white-background-copy-space-image152919490
+
+//Ancient Gate Image
+//Citation: Wooden Door by Pedro Duante https://br.pinterest.com/pin/193303008993390565/
+
+//Treasure of Esperanza (End of Game) Image
+//Citation: Adventuron CaveJam by Adverturon https://itch.io/jam/cavejam
+
+//Character Design
+//Citation: Hooded Protagonist by Penzilla https://penzilla.itch.io/hooded-protagonist?download
+
+//MAPS
+//Sage Mines
+//Citation: Cave/Mountain Map by SnakeMasterz https://www.deviantart.com/snakemasterz/art/Cave-Mountain-Map-690879637
+//Aurum Shore
+//Citation: Magiscarf Tileset test -___- by Phyromatical https://www.deviantart.com/phyromatical/art/Magiscarf-Tileset-test-430110418
+//Astrum Valley
+//Citation: Rocky Route Map by Slytherclaw https://www.deviantart.com/slytherclaw/art/Pokemon-Tabletop-United-Rocky-Route-Map-610257496
+//Celeste Lake
+//Citation: Lake Route Map by Slytherclaw https://www.deviantart.com/slytherclaw/art/Pokemon-Tabletop-United-Lake-Route-Map-610343874
+//Cacao Inn
+//Citation: Snowy Pathway by Phyromatical https://www.pinterest.com/pin/snowy-pathway-by-phyromatical-on-deviantart--312085449185496753/
+//Ira Volcano
+//Citation: https://www.pokecommunity.com/showthread.php?p=8570651
+//Visus Creek
+//Citation: Pokemon Map 002 by R4FZone https://www.pinterest.com/pin/58195020171513887/
+
+//Item Images
+//Gem
+//Citation: Gem Icons by Cliff Bellanger https://br.pinterest.com/pin/193303008993390565/
+//Star Flower
+//Citation: Pixel Art Flowers by cadmium_red https://br.pinterest.com/pin/193303008993390565/
+//Snowflake
+//Citation: Pixel Snowflake by Mega-Hikaru https://www.deviantart.com/mega-hikaru/art/Pixel-Snowflake-575662545
+//Fira
+//Citation: Pixel a Fire by Chibitheo https://www.dreamstime.com/pixel-fire-gui-vector-illustration-art-image222050871
+//Celestial Fish
+//Citation: https://www.reddit.com/r/Terraria/comments/hv4yp4/turning_all_the_bosses_into_fish_part_16_the/
+//Seashells
+//Citation: Pixel Seashell by PixelArtPlanet https://www.redbubble.com/i/sticker/Cute-Pixel-Blue-Seashell-with-Pearl-by-PixelArtPlanet/110358066.EJUG5
+//WaterCrystals
+//Citation: https://www.shutterstock.com/image-illustration/8bit-retrostyled-pixelart-illustration-crystal-mineral-2181098541
+
+//Cited Code
+//Code for "AncientGateGame, "AncientGateDialogue," all "CollisionDetector," "Corner Border," and all map "Leave" codes
+//Citation: Heart Game by kmclead https://studio.code.org/projects/applab/IXOjWADKBEyigUenl7JAjg/view
+//Citation: https://forum.code.org/t/collision-detection-in-app-lab/6309
+//Code for player movement
+//assisted by fellow student
+
+//Photo Editor Used
+//Citation: https://pixlr.com/x/
+
